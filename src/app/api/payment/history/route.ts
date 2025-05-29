@@ -1,4 +1,4 @@
-import connectDB from "@/config/connectDB";
+import { connectDB } from "@/config/connectDB";
 import PaymentModel from "@/models/PaymentModel";
 import { NextResponse } from "next/server";
 
@@ -24,16 +24,16 @@ export async function GET() {
   } catch (error: unknown) {
     // Type-safe error handling
     const processedError = error as CustomError;
-    
+
     console.error("Error fetching payments:", processedError);
-    
+
     return NextResponse.json(
       {
         success: false,
         message: "Failed to fetch payments",
         error: processedError.message || "An unknown error occurred",
         errorName: processedError.name,
-        errorCode: processedError.code
+        errorCode: processedError.code,
       },
       { status: 500 }
     );
