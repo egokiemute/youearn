@@ -8,10 +8,6 @@ import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ApiResponse, SignupData } from "../../../../types";
 
-interface SignupFormProps {
-  initialReferralCode?: string;
-}
-
 interface FormErrors {
   email?: string;
   password?: string;
@@ -19,7 +15,7 @@ interface FormErrors {
   referralCode?: string;
 }
 
-export default function SignupForm({ initialReferralCode = '' }: SignupFormProps) {
+export default function SignupPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -30,7 +26,7 @@ export default function SignupForm({ initialReferralCode = '' }: SignupFormProps
     email: "",
     password: "",
     telegramUsername: "",
-    referralCode: urlReferralCode || initialReferralCode,
+    referralCode: urlReferralCode,
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
@@ -44,7 +40,7 @@ export default function SignupForm({ initialReferralCode = '' }: SignupFormProps
         referralCode: urlReferralCode
       }));
     }
-  }, [urlReferralCode]);
+  }, [urlReferralCode, formData.referralCode]);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -111,8 +107,8 @@ export default function SignupForm({ initialReferralCode = '' }: SignupFormProps
         setError(data.message || "Signup failed");
         toast.error(data.message || "Signup failed");
       }
-    } catch (err) {
-      console.log(err)
+    } catch (error) {
+      console.error("Signup error:", error);
       const errorMessage = "Network error. Please try again.";
       setError(errorMessage);
       toast.error(errorMessage);
