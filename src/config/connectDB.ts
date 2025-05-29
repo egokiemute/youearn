@@ -6,10 +6,10 @@ const isLocalhost = process.env.NODE_ENV === 'development' ||
                    typeof window !== 'undefined';
 
 // Use MongoDB Compass connection for localhost, otherwise use environment variable
-// const MONGODB_URI = isLocalhost 
-//   ? 'mongodb://localhost:27017/youearn'
-//   : process.env.MONGO_URI || 'mongodb://localhost:27017/youearn';
-const MONGODB_URI = 'mongodb://localhost:27017/youearn';
+const MONGODB_URI = isLocalhost 
+  ? 'mongodb://localhost:27017/youearn'
+  : process.env.MONGO_URI || 'mongodb://localhost:27017/youearn';
+// const MONGODB_URI = 'mongodb://localhost:27017/youearn';
 
 if (!MONGODB_URI) {
   throw new Error(
