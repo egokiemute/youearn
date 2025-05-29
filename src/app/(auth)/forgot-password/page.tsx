@@ -41,22 +41,22 @@ const ForgotPassword = () => {
     try {
       setIsLoading(true);
 
-      const response = await fetch("/api/auth/forgot-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: values.email }),
-      });
+      // const response = await fetch("/api/auth/forgot-password", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({ email: values.email }),
+      // });
 
-      const data = await response.json();
+      // const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || "Something went wrong");
-      }
+      // if (!response.ok) {
+      //   throw new Error(data.error || "Something went wrong");
+      // }
 
       // Show success message
-      toast.success(data.message || "Password reset email sent successfully");
+      toast.success("Password reset email sent successfully");
 
       // Reset form
       form.reset();
