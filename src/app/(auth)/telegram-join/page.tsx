@@ -21,7 +21,7 @@ const JoinTelegram = () => {
   // Check if user exists in localStorage on component mount
   useEffect(() => {
     const userData = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
     if (userData) {
       try {
         const user = JSON.parse(userData);

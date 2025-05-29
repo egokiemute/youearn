@@ -43,8 +43,8 @@ export async function GET(request: NextRequest) {
         referralCode: user.referralCode ?? "",
         referralCount: user.referrals ? user.referrals.length : 0,
         telegramJoinedReferrals: user.referrals
-          ? user.referrals.filter((ref: any) => ref.telegramJoined).length
-          : 0,
+        ? user.referrals.filter((ref: { telegramJoined: boolean }) => ref.telegramJoined).length
+        : 0,
       })),
       summary: {
         totalUsers,
