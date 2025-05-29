@@ -19,6 +19,7 @@ export const verifyToken = (token: string): TokenPayload | null => {
   try {
     return jwt.verify(token, process.env.JWT_SECRET as string) as TokenPayload;
   } catch (error) {
+    console.log(error)
     return null;
   }
 };
