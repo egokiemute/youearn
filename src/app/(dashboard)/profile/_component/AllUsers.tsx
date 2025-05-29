@@ -22,16 +22,6 @@ interface User {
    role: string; // "admin" | "user"
    createdAt: Date;
  }
- 
-
-// interface PaginationData {
-//   total: number;
-//   page: number;
-//   limit: number;
-//   totalPages: number;
-//   hasNextPage: boolean;
-//   hasPrevPage: boolean;
-// }
 
 interface ApiResponse {
   success: boolean;
