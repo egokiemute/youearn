@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import PaymentHistory from '../_component/PaymentHistory';
+// import PaymentHistory from '../_component/PaymentHistory';
 import axiosInstance from '@/lib/Axios';
 
 // Define the payment interface
@@ -161,10 +161,11 @@ const PaymentHistoryPage: React.FC = () => {
           </button>
         </div>
       ) : (
-        <PaymentHistory
-          payments={payments}
-          onExportCSV={handleExportCSV}
-        />
+        // <PaymentHistory
+        //   payments={payments}
+        //   onExportCSV={handleExportCSV}
+        // />
+        <p>Hello</p>
       )}
     </div>
   );
