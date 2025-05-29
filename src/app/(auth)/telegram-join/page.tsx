@@ -97,6 +97,7 @@ const JoinTelegram = () => {
         setError(data.message || "Failed to update join status");
       }
     } catch (err) {
+      console.log(err)
       setError("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
@@ -114,7 +115,7 @@ const JoinTelegram = () => {
             Welcome to the Community! 🎉
           </h1>
           <p className="text-gray-600 mb-6">
-            You've successfully joined our Telegram channel. Get ready for
+            You&apos;ve successfully joined our Telegram channel. Get ready for
             exclusive updates, tips, and community discussions!
           </p>
           <div className="bg-green-50 border border-green-200 rounded-lg p-4">
@@ -221,7 +222,7 @@ const JoinTelegram = () => {
               ) : (
                 <>
                   <Check className="w-5 h-5" />
-                  <span>I've Joined the Channel</span>
+                  <span>I&apos;ve Joined the Channel</span>
                 </>
               )}
             </button>

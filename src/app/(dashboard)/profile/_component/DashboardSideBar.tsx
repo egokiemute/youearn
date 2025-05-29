@@ -27,7 +27,7 @@ const DashboardSideBar = () => {
   const isAdmin = user?.role === 'admin';
 
   const handleSignOut = async () => {
-    setIsLoggingOut(true);
+    setIsLoggingOut(!isLoggingOut);
     try {
       // Call both logout methods to ensure clean logout
       if (logout) {
@@ -114,6 +114,9 @@ const DashboardSideBar = () => {
               </Link>
             ))}
           </div>
+        </div>
+        <div className="hidden">
+          <button onClick={handleSignOut}>logout</button>
         </div>
       </div>
     </div>

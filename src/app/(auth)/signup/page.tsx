@@ -112,6 +112,7 @@ export default function SignupForm({ initialReferralCode = '' }: SignupFormProps
         toast.error(data.message || "Signup failed");
       }
     } catch (err) {
+      console.log(err)
       const errorMessage = "Network error. Please try again.";
       setError(errorMessage);
       toast.error(errorMessage);
@@ -144,7 +145,7 @@ export default function SignupForm({ initialReferralCode = '' }: SignupFormProps
       {formData.referralCode && (
         <div className="mb-4 p-3 bg-blue-100 border border-blue-400 text-blue-700 rounded">
           <p className="text-sm">
-            🎉 You're signing up with referral code: <span className="font-semibold">{formData.referralCode}</span>
+            🎉 You&apos;re signing up with referral code: <span className="font-semibold">{formData.referralCode}</span>
           </p>
         </div>
       )}

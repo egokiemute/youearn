@@ -50,7 +50,7 @@ export default function ReferralPage() {
         // If validation fails, still redirect to signup with the code
         router.push(`/signup?ref=${referralCode.toUpperCase()}`);
       } finally {
-        setIsValidating(false);
+        setIsValidating(!isValidating);
       }
     };
 

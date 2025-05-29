@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 // import connectDB from '@/lib/db';
 // import UserModel from '@/models/UserModel';
 import { getUserFromRequest } from '@/lib/auth';
-import connectDB from '@/config/connectDB';
 import { ApiResponse } from '../../../../../types';
 import UserModel from '@/models/User';
+import { connectDB } from '@/config/connectDB';
 // import { ApiResponse } from '@/types';
 
 export async function GET(request: NextRequest) {
@@ -63,12 +63,12 @@ export async function GET(request: NextRequest) {
       }
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Profile fetch error:', error);
     return NextResponse.json<ApiResponse>({
       success: false,
       message: 'Server error',
-      error: error.message
+      error: `Failed to user profile: ${error instanceof Error ? error.message : 'Unknown error'}`,
     }, { status: 500 });
   }
 }

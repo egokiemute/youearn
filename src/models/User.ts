@@ -55,7 +55,7 @@ interface IUserStatics extends Model<IUser> {
     referralCode?: string; // This is the referrer's code
   }): Promise<IUser>;
   findByReferralCode(code: string): Promise<IUser | null>;
-  getAllUsersWithStats(): Promise<any>;
+  getAllUsersWithStats(): Promise<IUserWithReferrals[]>;
   isValidReferralCode(code: string): boolean;
 }
 

@@ -43,8 +43,8 @@ export async function middleware(request: NextRequest) {
   }
 
   // Public routes that don't require authentication
-  const publicRoutes = ['/', '/login', '/signup'];
-  const isPublicRoute = publicRoutes.includes(pathname) || pathname.startsWith('/api/auth');
+  // const publicRoutes = ['/', '/login', '/signup'];
+  // const isPublicRoute = publicRoutes.includes(pathname) || pathname.startsWith('/api/auth');
   
   // API routes that should not be redirected
   if (pathname.startsWith('/api/')) {

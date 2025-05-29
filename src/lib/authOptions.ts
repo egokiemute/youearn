@@ -1,4 +1,4 @@
-import connectDB from "@/config/connectDB";
+import { connectDB } from "@/config/connectDB";
 import UserModel from "@/models/User";
 import bcrypt from "bcryptjs";
 import NextAuth from "next-auth";
@@ -10,8 +10,8 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text" },  // Changed 'value' to 'type'
-        password: { label: "Password", type: "password" },  // Changed 'value' to 'type' and 'text' to 'password'
+        email: { label: "Email", type: "text" }, // Changed 'value' to 'type'
+        password: { label: "Password", type: "password" }, // Changed 'value' to 'type' and 'text' to 'password'
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
@@ -37,16 +37,18 @@ export const authOptions: NextAuthOptions = {
 
           return {
             id: user._id.toString(),
-            name: user.firstname,
+            name: user.telegramUsername,
             email: user.email,
             role: user.role,
-            studentId: user.studentId,
-            picture: user.picture,
+            studentId: user.telegramJoined,
           };
-        } catch (error) {  // Added type annotation
+        } catch (error) {
+          // Added type annotation
           console.error("Authentication error:", error);
           throw new Error(
-            error instanceof Error ? error.message : "Error connecting to database"
+            error instanceof Error
+              ? error.message
+              : "Error connecting to database"
           );
         }
       },
@@ -60,7 +62,8 @@ export const authOptions: NextAuthOptions = {
       }
       return token;
     },
-    session: async ({ session, token }) => {  // Added type annotations
+    session: async ({ session, token }) => {
+      // Added type annotations
       if (token) {
         session.user.role = token.role as string;
         session.user.id = token.id as string;

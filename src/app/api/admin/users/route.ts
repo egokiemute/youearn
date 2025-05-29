@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 // import connectDB from '@/lib/db';
 // import UserModel from '@/models/UserModel';
 import { getUserFromRequest } from "@/lib/auth";
-import connectDB from "@/config/connectDB";
+import { connectDB } from "@/config/connectDB";
 import { ApiResponse } from "../../../../../types";
 import UserModel from "@/models/User";
 // import { ApiResponse } from '@/types';
@@ -37,7 +37,11 @@ export async function GET(request: NextRequest) {
       message: "Admin users fetched successfully",
       success: true,
       data: {
-        users,
+        users: users.map((user: any) => ({
+          ...user,
+          referralCount: user.referralCount ?? 0,
+          telegramJoinedReferrals: user.telegramJoinedReferrals ?? 0,
+        })),
         summary: {
           totalUsers,
           totalReferrals,

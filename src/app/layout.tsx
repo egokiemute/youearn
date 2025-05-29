@@ -2,9 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import Provider from "@/Provider/Provider";
 import { UserProvider } from "@/Provider/UserProvider";
-// import UserProvider from "@/contexts/UserContext";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -12,8 +10,8 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Edupay.com",
-  description: "Simplify School Fee Payments with Edupay",
+  title: "YouEarn - watch advertisements and earn money",
+  description: "Watch advertisements and earn money",
 };
 
 export default function RootLayout({

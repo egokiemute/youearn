@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/Provider/UserProvider";
-import { CreditCard, Home, User, UserCircle } from "lucide-react";
+import { CreditCard, Home, User } from "lucide-react";
 import { Poppins } from "next/font/google";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
