@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
@@ -15,13 +15,13 @@ interface FormErrors {
   referralCode?: string;
 }
 
-export default function SignupPage() {
+function SignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   // Get referral code from URL parameters (e.g., /signup?ref=ABC12)
-  const urlReferralCode = searchParams.get('ref') || '';
-  
+  const urlReferralCode = searchParams.get("ref") || "";
+
   const [formData, setFormData] = useState<SignupData>({
     email: "",
     password: "",
@@ -35,9 +35,9 @@ export default function SignupPage() {
   // Update referral code when URL parameters change
   useEffect(() => {
     if (urlReferralCode && urlReferralCode !== formData.referralCode) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        referralCode: urlReferralCode
+        referralCode: urlReferralCode,
       }));
     }
   }, [urlReferralCode, formData.referralCode]);
@@ -62,9 +62,10 @@ export default function SignupPage() {
     }
 
     // Validate referral code format if provided
-    if (formData.referralCode && formData.referralCode.trim() !== '') {
-      if (!/^[A-Z0-9]{5}$/i.test(formData.referralCode.trim())) {
-        newErrors.referralCode = "Referral code must be 5 characters (letters and numbers only)";
+    if (formData.referralCode && formData.referralCode.trim() !== "") {
+      if (!/^[a-zA-Z0-9]{5}$/i.test(formData.referralCode.trim())) {
+        newErrors.referralCode =
+          "Referral code must be 5 characters (letters and numbers only)";
       }
     }
 
@@ -74,7 +75,7 @@ export default function SignupPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -119,16 +120,16 @@ export default function SignupPage() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
 
     // Clear error for this field when user starts typing
     if (errors[name as keyof FormErrors]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: undefined
+        [name]: undefined,
       }));
     }
   };
@@ -136,12 +137,13 @@ export default function SignupPage() {
   return (
     <div className="w-full max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
       <h1 className="text-2xl font-bold pb-4">Create account</h1>
-      
+
       {/* Show referral info if code is pre-filled */}
       {formData.referralCode && (
         <div className="mb-4 p-3 bg-blue-100 border border-blue-400 text-blue-700 rounded">
           <p className="text-sm">
-            🎉 You&apos;re signing up with referral code: <span className="font-semibold">{formData.referralCode}</span>
+            🎉 You&apos;re signing up with referral code:{" "}
+            <span className="font-semibold">{formData.referralCode}</span>
           </p>
         </div>
       )}
@@ -190,7 +192,9 @@ export default function SignupPage() {
             className={errors.telegramUsername ? "border-red-500" : ""}
           />
           {errors.telegramUsername && (
-            <p className="text-red-500 text-sm mt-1">{errors.telegramUsername}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {errors.telegramUsername}
+            </p>
           )}
         </div>
 
@@ -232,5 +236,30 @@ export default function SignupPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+function LoadingFallback() {
+  return (
+    <div className="w-full max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+      <div className="animate-pulse">
+        <div className="h-8 bg-gray-200 rounded mb-4"></div>
+        <div className="space-y-4">
+          <div className="h-10 bg-gray-200 rounded"></div>
+          <div className="h-10 bg-gray-200 rounded"></div>
+          <div className="h-10 bg-gray-200 rounded"></div>
+          <div className="h-10 bg-gray-200 rounded"></div>
+          <div className="h-10 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <SignupForm />
+    </Suspense>
   );
 }
