@@ -1,6 +1,5 @@
 
 import React from "react";
-import AllPayments from "../dashboard/_component/AllPayments";
 
 const AdminDashboardPage = () => {
   return (
@@ -25,7 +24,7 @@ const AdminDashboardPage = () => {
             </div>
           </div>
           <div className="px-2">
-            <AllPayments />
+            {/* <AllPayments /> */}
           </div>
         </div>
       </div>
