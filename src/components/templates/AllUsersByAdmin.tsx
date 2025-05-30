@@ -22,14 +22,6 @@ interface Summary {
   averageReferralsPerUser: string;
 }
 
-interface ApiResponse {
-  message: string;
-  success: boolean;
-  data: {
-    users: User[];
-    summary: Summary;
-  };
-}
 
 const AllUsersByAdmin = () => {
   const [users, setUsers] = useState<User[]>([]);
