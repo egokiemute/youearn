@@ -47,14 +47,14 @@ const LoginPage = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
 
     // Clear error when user starts typing
     if (errors[name as keyof typeof errors]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
         [name]: "",
       }));
@@ -63,20 +63,20 @@ const LoginPage = () => {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     try {
       setIsLoading(true);
-      
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
+
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        credentials: 'include', // Important: Include cookies in the request
+        credentials: "include", // Important: Include cookies in the request
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
@@ -92,28 +92,40 @@ const LoginPage = () => {
 
       // Login successful
       toast.success("Login successful");
-      
+
       // Store user data and token using your UserProvider
       if (login && result.data) {
         login(result.data.user, result.data.token);
       }
-      
+
       // Check for redirect parameter from URL
       const urlParams = new URLSearchParams(window.location.search);
-      const redirectPath = urlParams.get('redirect');
-      
+      const redirectPath = urlParams.get("redirect");
+      console.log(redirectPath);
+
+      if (result.data.user.role === "admin") {
+        router.push("/admin");
+      } else {
+        router.push("/profile");
+      }
+
       if (redirectPath) {
         // Redirect to the original intended path
         router.push(redirectPath);
+
+        if (result.data.user.role === "admin") {
+          router.push("/admin");
+        } else {
+          router.push("/profile");
+        }
       } else {
         // Default redirect based on user role
-        if (result.data.user.role === 'admin') {
-          router.push('/admin');
+        if (result.data.user.role === "admin") {
+          router.push("/admin");
         } else {
-          router.push('/profile');
+          router.push("/profile");
         }
       }
-      
     } catch (error) {
       toast.error("An error occurred during login");
       console.error("Login error:", error);
@@ -140,7 +152,7 @@ const LoginPage = () => {
             <p className="text-red-500 text-sm mt-1">{errors.email}</p>
           )}
         </div>
-        
+
         <div>
           <Input
             name="password"
@@ -155,26 +167,31 @@ const LoginPage = () => {
             <p className="text-red-500 text-sm mt-1">{errors.password}</p>
           )}
         </div>
-        
+
         <div className="w-fit ml-auto text-sm cursor-pointer hover:text-green-800 -mt-2">
-          <Link href={"/forgot-password"}>
-            Forgot password?
-          </Link>
+          <Link href={"/forgot-password"}>Forgot password?</Link>
         </div>
-        
+
         <Button
           disabled={isLoading}
           className="bg-[#fe0000] hover:bg-[#fe0000aa] w-full text-white"
           type="submit"
         >
-          {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Login"}
+          {isLoading ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            "Login"
+          )}
         </Button>
       </form>
-      
+
       <div className="mt-4 text-center">
         <p>
           Don&apos;t have an account?{" "}
-          <Link href="/signup" className="text-blue-500 hover:text-blue-600 font-medium">
+          <Link
+            href="/signup"
+            className="text-blue-500 hover:text-blue-600 font-medium"
+          >
             Register
           </Link>
         </p>
