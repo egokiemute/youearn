@@ -77,7 +77,7 @@ export async function GET({ params }: { params: { userId: string } }) {
         referralUsers = (user.referrals as unknown[]).map((ref) => {
           const referral = ref as ReferralUser;
           return {
-            _id: typeof referral._id === "object" && "toString" in referral._id ? (referral._id as any).toString() : referral._id,
+            _id: typeof referral._id === "object" && "toString" in referral._id ? (referral._id as string).toString() : referral._id,
             name: referral.name || "N/A",
             email: referral.email || "",
             createdAt: referral.createdAt || new Date(),
