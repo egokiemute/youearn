@@ -19,11 +19,12 @@ interface ReferralUser {
   totalEarnings?: number;
 }
 
-export async function GET({ params }: { params: { userId: string } }) {
+export async function GET(
+  context: { params: { userId: string } }) {
   try {
     await connectDB(); // Ensure database connection
 
-    const { userId } = params;
+    const { userId } = context.params;
 
     if (!userId) {
       return NextResponse.json(
