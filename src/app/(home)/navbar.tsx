@@ -56,8 +56,8 @@ export const Navbar = () => {
           poppins.className
         )}
       >
-        <span className="">Edu</span>
-        <span className="text-[#fe0000]">pay</span>
+        <span className="">You</span>
+        <span className="text-[#fe0000]">earn</span>
       </Link>
 
       <NavbarSidebar items={NavbarItems} open={isSidebarOpen} onOpenChange={setSidebarOpen} />
