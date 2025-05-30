@@ -76,6 +76,7 @@ const LoginPage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include', // Important: Include cookies in the request
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
@@ -97,11 +98,20 @@ const LoginPage = () => {
         login(result.data.user, result.data.token);
       }
       
-      // Redirect based on user role
-      if (result.data.user.role === 'admin') {
-        router.push('/admin');
+      // Check for redirect parameter from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectPath = urlParams.get('redirect');
+      
+      if (redirectPath) {
+        // Redirect to the original intended path
+        router.push(redirectPath);
       } else {
-        router.push('/profile');
+        // Default redirect based on user role
+        if (result.data.user.role === 'admin') {
+          router.push('/admin');
+        } else {
+          router.push('/profile');
+        }
       }
       
     } catch (error) {
@@ -124,6 +134,7 @@ const LoginPage = () => {
             value={formData.email}
             onChange={handleInputChange}
             className={errors.email ? "border-red-500" : ""}
+            disabled={isLoading}
           />
           {errors.email && (
             <p className="text-red-500 text-sm mt-1">{errors.email}</p>
@@ -138,6 +149,7 @@ const LoginPage = () => {
             value={formData.password}
             onChange={handleInputChange}
             className={errors.password ? "border-red-500" : ""}
+            disabled={isLoading}
           />
           {errors.password && (
             <p className="text-red-500 text-sm mt-1">{errors.password}</p>

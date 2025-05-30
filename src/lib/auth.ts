@@ -1,39 +1,48 @@
-import jwt from 'jsonwebtoken';
+import { SignJWT, jwtVerify } from 'jose';
 import { NextRequest } from 'next/server';
 
 export interface TokenPayload {
   userId: string;
   email: string;
   role?: string;
+  iat?: number;
+  exp?: number;
 }
 
-export const generateToken = (payload: TokenPayload): string => {
-  return jwt.sign(
-    payload,
-    process.env.JWT_SECRET as string,
-    { expiresIn: '24h' }
-  );
+const secret = new TextEncoder().encode(process.env.JWT_SECRET as string);
+
+export const generateToken = async (payload: TokenPayload): Promise<string> => {
+  return await new SignJWT(payload as unknown as Record<string, unknown>)
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime('24h')
+    .sign(secret);
 };
 
-export const verifyToken = (token: string): TokenPayload | null => {
+export const verifyToken = async (token: string): Promise<TokenPayload | null> => {
   try {
-    return jwt.verify(token, process.env.JWT_SECRET as string) as TokenPayload;
+    const { payload } = await jwtVerify(token, secret);
+    return payload as unknown as TokenPayload;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return null;
   }
 };
 
 export const getTokenFromRequest = (request: NextRequest): string | null => {
+  // Try Authorization header first
   const authHeader = request.headers.get('authorization');
   if (authHeader && authHeader.startsWith('Bearer ')) {
     return authHeader.substring(7);
   }
-  return null;
+  
+  // Try cookies as fallback
+  const tokenFromCookie = request.cookies.get('token')?.value;
+  return tokenFromCookie || null;
 };
 
-export const getUserFromRequest = (request: NextRequest): TokenPayload | null => {
+export const getUserFromRequest = async (request: NextRequest): Promise<TokenPayload | null> => {
   const token = getTokenFromRequest(request);
   if (!token) return null;
-  return verifyToken(token);
+  return await verifyToken(token);
 };

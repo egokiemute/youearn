@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   try {
     await connectDB();
     
-    const user = getUserFromRequest(request);
+    const user = await getUserFromRequest(request);
     if (!user) {
       return NextResponse.json<ApiResponse>({
         success: false,

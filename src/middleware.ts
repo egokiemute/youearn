@@ -10,14 +10,14 @@ interface TokenPayload {
   email?: string;
   name?: string;
   username?: string;
-  [key: string]: unknown;
+  iat?: number;
+  exp?: number;
 }
 
 // Helper function to verify JWT token
 async function verifyToken(token: string): Promise<TokenPayload | null> {
   try {
-    // Replace 'your-secret-key' with your actual JWT secret
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key');
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET as string);
     const { payload } = await jwtVerify(token, secret);
     return payload as TokenPayload;
   } catch (error) {
@@ -42,10 +42,6 @@ export async function middleware(request: NextRequest) {
     user = await verifyToken(token);
   }
 
-  // Public routes that don't require authentication
-  // const publicRoutes = ['/', '/login', '/signup'];
-  // const isPublicRoute = publicRoutes.includes(pathname) || pathname.startsWith('/api/auth');
-  
   // API routes that should not be redirected
   if (pathname.startsWith('/api/')) {
     // For API routes, just add user info to headers if authenticated

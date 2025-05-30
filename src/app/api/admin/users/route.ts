@@ -1,18 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-// import connectDB from '@/lib/db';
-// import UserModel from '@/models/UserModel';
 import { getUserFromRequest } from "@/lib/auth";
 import { connectDB } from "@/config/connectDB";
 import { ApiResponse } from "../../../../../types";
 import UserModel from "@/models/User";
-// import { ApiResponse } from '@/types';
 
 export async function GET(request: NextRequest) {
   try {
     await connectDB();
 
-    const user = getUserFromRequest(request);
-    if (!user || user.role !== "admin") {
+    const user = await getUserFromRequest(request);
+    if (!user || user?.role !== "admin") {
       return NextResponse.json<ApiResponse>(
         {
           success: false,

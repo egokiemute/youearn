@@ -1,4 +1,5 @@
 
+import AllUsersByAdmin from "@/components/templates/AllUsersByAdmin";
 import React from "react";
 
 const AdminDashboardPage = () => {
@@ -24,7 +25,7 @@ const AdminDashboardPage = () => {
             </div>
           </div>
           <div className="px-2">
-            {/* <AllPayments /> */}
+            <AllUsersByAdmin />
           </div>
         </div>
       </div>

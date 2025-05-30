@@ -10,7 +10,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "YouEarn - watch advertisements and earn money",
+  title: "Youearn - watch advertisements and earn money",
   description: "Watch advertisements and earn money",
 };
 

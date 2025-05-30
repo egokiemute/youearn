@@ -34,18 +34,18 @@ export const Hero = () => {
       <div className="relative z-10 container mx-auto px-6 h-full flex items-center justify-center">
         <div className="max-w-3xl flex flex-col items-center text-center">
           <h1 className="text-[#fff] text-center text-4xl md:text-7xl font-bold mb-4">
-            With YouEarn, Your Time Has Value And We Pay You For It.
+            With Youearn, Your Time Has Value And We Pay You For It.
           </h1>
           <p className="text-gray-300 text-lg md:text-2xl mb-6">
             Turn your time into digital currency. Join thousands earning cryptocurrency daily through our simple ad-viewing platform.
           </p>
 
-          <div className="flex flex-wrap gap-4">
+          <div className="flex items-center text-center justify-center flex-wrap gap-4">
             <Button
               asChild
               variant="elevated"
               className={cn(
-                "bg-yellow-500 text-black hover:bg-white hover:text-black rounded-sm px-12 py-6 text-lg transition-all"
+                "bg-[#fe0000] text-white hover:bg-white hover:text-black rounded-sm px-12 py-6 text-lg transition-all"
               )}
             >
               <Link href="/login">Login</Link>

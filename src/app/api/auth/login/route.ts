@@ -42,13 +42,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate JWT token
-    const token = generateToken({
+    const token = await generateToken({
       userId: user._id.toString(),
       email: user.email,
       role: user.role,
     });
 
-    return NextResponse.json<ApiResponse>({
+    // Create response with user data
+    const response = NextResponse.json<ApiResponse>({
       success: true,
       message: "Login successful",
       data: {
@@ -63,6 +64,17 @@ export async function POST(request: NextRequest) {
         token,
       },
     });
+
+    // Set token as HTTP-only cookie for security
+    response.cookies.set('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 24 * 60 * 60, // 24 hours
+      path: '/',
+    });
+
+    return response;
   } catch (error) {
     console.error("Login error:", error);
 
