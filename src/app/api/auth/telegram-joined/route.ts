@@ -8,7 +8,7 @@ export async function PUT(request: NextRequest) {
   try {
     await connectDB();
 
-    const user = getUserFromRequest(request);
+    const user = await getUserFromRequest(request);
     if (!user) {
       return NextResponse.json<ApiResponse>(
         {

@@ -1,23 +1,101 @@
 "use client";
 import { useUser } from "@/Provider/UserProvider";
-import { Copy, Share2, Trophy, Users, ExternalLink, CheckCircle } from "lucide-react";
-import React, { useState } from "react";
+import {
+  Copy,
+  Share2,
+  Trophy,
+  Users,
+  ExternalLink,
+  CheckCircle,
+  Loader2,
+} from "lucide-react";
+import React, { useState, useEffect } from "react";
+
+interface User {
+  referrals?: number[];
+  totalEarnings?: number;
+  referralCode?: string;
+  id?: string;
+  _id?: string;
+  name?: string;
+  email?: string;
+}
+
+interface LeaderboardUser {
+  _id: string;
+  name?: string;
+  email?: string;
+  referrals?: number[];
+  totalEarnings?: number;
+  referralCode?: string;
+}
 
 const DashboardPage = () => {
-  const { user } = useUser();
+  const { user } = useUser() as { user: User };
   const [copied, setCopied] = useState(false);
-  
-  // Mock leaderboard data - replace with actual API call
-  const leaderboardData = [
-    { id: 1, name: "Alice Johnson", referrals: 45, earnings: 1250.50 },
-    { id: 2, name: "Bob Smith", referrals: 38, earnings: 1050.00 },
-    { id: 3, name: "Carol Davis", referrals: 32, earnings: 890.25 },
-    { id: 4, name: "David Wilson", referrals: 28, earnings: 750.00 },
-    { id: 5, name: "Eva Brown", referrals: 25, earnings: 687.50 },
-    { id: 6, name: "Frank Miller", referrals: 22, earnings: 605.00 },
-    { id: 7, name: "Grace Lee", referrals: 18, earnings: 495.00 },
-    { id: 8, name: "Henry Chen", referrals: 15, earnings: 412.50 },
-  ];
+  const [leaderboardData, setLeaderboardData] = useState<LeaderboardUser[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch users from API
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        const response = await fetch("/api/user");
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.message || "Failed to fetch users");
+        }
+
+        if (result.success && result.data) {
+          // Sort users by referrals count and earnings for leaderboard
+          const sortedUsers: LeaderboardUser[] = (
+            result.data as LeaderboardUser[]
+          )
+            .filter(
+              (user: LeaderboardUser) =>
+                user.referrals && user.referrals.length > 0
+            ) // Only users with referrals
+            .sort((a: LeaderboardUser, b: LeaderboardUser) => {
+              // First sort by referral count, then by earnings
+              const aReferrals = a.referrals?.length || 0;
+              const bReferrals = b.referrals?.length || 0;
+              const aEarnings = a.totalEarnings || 0;
+              const bEarnings = b.totalEarnings || 0;
+
+              if (bReferrals !== aReferrals) {
+                return bReferrals - aReferrals;
+              }
+              return bEarnings - aEarnings;
+            })
+            .slice(0, 10); // Top 10 users
+
+          setLeaderboardData(sortedUsers);
+        } else {
+          throw new Error("Invalid response format");
+        }
+      } catch (err) {
+        console.error("Error fetching users:", err);
+        setError(err instanceof Error ? err.message : "Unknown error");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  // Find current user's rank
+  const getCurrentUserRank = () => {
+    if (!user || !leaderboardData.length) return null;
+
+    const userIndex = leaderboardData.findIndex((u) => u._id === user?.id);
+    return userIndex >= 0 ? userIndex + 1 : null;
+  };
 
   const referralLink = `https://youearn.com/${user?.referralCode}`;
 
@@ -27,7 +105,7 @@ const DashboardPage = () => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error('Failed to copy: ', err);
+      console.error("Failed to copy: ", err);
     }
   };
 
@@ -35,17 +113,19 @@ const DashboardPage = () => {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Join Youearn - Crypto Advert Earning Platform',
-          text: 'Start earning crypto by viewing ads! Use my referral link to get started.',
+          title: "Join Youearn - Crypto Advert Earning Platform",
+          text: "Start earning crypto by viewing ads! Use my referral link to get started.",
           url: referralLink,
         });
       } catch (err) {
-        console.error('Error sharing:', err);
+        console.error("Error sharing:", err);
       }
     } else {
       copyToClipboard();
     }
   };
+
+  const currentUserRank = getCurrentUserRank();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -57,7 +137,8 @@ const DashboardPage = () => {
               Welcome to Your Youearn Dashboard
             </h1>
             <p className="text-gray-600">
-              Youearn is a crypto advert earning platform. Share your referral link and earn rewards!
+              Youearn is a crypto advert earning platform. Share your referral
+              link and earn rewards!
             </p>
           </div>
 
@@ -69,32 +150,44 @@ const DashboardPage = () => {
                   <Users className="h-8 w-8 text-[#09005b]" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">Total Referrals</p>
-                  <p className="text-2xl font-semibold text-gray-900">0</p>
+                  <p className="text-sm font-medium text-gray-500">
+                    Total Referrals
+                  </p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {user?.referrals?.length || 0}
+                  </p>
                 </div>
               </div>
             </div>
-            
+
             <div className="bg-white shadow rounded-lg p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <Trophy className="h-8 w-8 text-yellow-600" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">Total Earnings</p>
-                  <p className="text-2xl font-semibold text-gray-900">$0.00</p>
+                  <p className="text-sm font-medium text-gray-500">
+                    Total Earnings
+                  </p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    ${(user?.totalEarnings || 0).toFixed(2)}
+                  </p>
                 </div>
               </div>
             </div>
-            
+
             <div className="bg-white shadow rounded-lg p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <Share2 className="h-8 w-8 text-[#fe0000dd]" />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">Referral Code</p>
-                  <p className="text-2xl font-semibold text-gray-900">{user?.referralCode}</p>
+                  <p className="text-sm font-medium text-gray-500">
+                    Referral Code
+                  </p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    {user?.referralCode}
+                  </p>
                 </div>
               </div>
             </div>
@@ -107,9 +200,10 @@ const DashboardPage = () => {
               Your Referral Link
             </h2>
             <p className="text-gray-600 mb-4">
-              Share this link with friends and earn crypto when they join and start earning!
+              Share this link with friends and earn crypto when they join and
+              start earning!
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="flex-1">
                 <div className="relative">
@@ -122,7 +216,7 @@ const DashboardPage = () => {
                   <ExternalLink className="absolute right-3 top-3.5 h-5 w-5 text-gray-400" />
                 </div>
               </div>
-              
+
               <div className="flex gap-2">
                 <button
                   onClick={copyToClipboard}
@@ -140,7 +234,7 @@ const DashboardPage = () => {
                     </>
                   )}
                 </button>
-                
+
                 <button
                   onClick={shareLink}
                   className="flex items-center px-4 py-3 bg-[#fe0000] text-white rounded-lg hover:bg-[#fe0000aa] transition-colors"
@@ -161,65 +255,115 @@ const DashboardPage = () => {
             <p className="text-gray-600 mb-6">
               See how you stack up against other top referrers on the platform.
             </p>
-            
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Rank
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      User
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Referrals
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Earnings
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {leaderboardData.map((user, index) => (
-                    <tr key={user.id} className={index < 3 ? 'bg-yellow-50' : ''}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          {index < 3 && (
-                            <Trophy className={`h-4 w-4 mr-2 ${
-                              index === 0 ? 'text-yellow-500' : 
-                              index === 1 ? 'text-gray-400' : 'text-orange-400'
-                            }`} />
-                          )}
-                          <span className="text-sm font-medium text-gray-900">
-                            #{index + 1}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{user.referrals}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-[#fe0000]">
-                          ${user.earnings.toFixed(2)}
-                        </div>
-                      </td>
+
+            {isLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-6 w-6 animate-spin text-[#09005b] mr-2" />
+                <span className="text-gray-600">Loading leaderboard...</span>
+              </div>
+            ) : error ? (
+              <div className="text-center py-8">
+                <p className="text-red-600 mb-2">Failed to load leaderboard</p>
+                <p className="text-sm text-gray-500">{error}</p>
+              </div>
+            ) : leaderboardData.length === 0 ? (
+              <div className="text-center py-8">
+                <Trophy className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                <p className="text-gray-600 mb-2">No referrers yet!</p>
+                <p className="text-sm text-gray-500">
+                  Be the first to start referring friends.
+                </p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Rank
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        User
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Referrals
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Earnings
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {leaderboardData.map((leaderUser, index) => (
+                      <tr
+                        key={leaderUser._id}
+                        className={`${index < 3 ? "bg-yellow-50" : ""} ${
+                          leaderUser._id === user?._id
+                            ? "ring-2 ring-[#fe0000] ring-opacity-50"
+                            : ""
+                        }`}
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            {index < 3 && (
+                              <Trophy
+                                className={`h-4 w-4 mr-2 ${
+                                  index === 0
+                                    ? "text-yellow-500"
+                                    : index === 1
+                                      ? "text-gray-400"
+                                      : "text-orange-400"
+                                }`}
+                              />
+                            )}
+                            <span className="text-sm font-medium text-gray-900">
+                              #{index + 1}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <div className="text-sm font-medium text-gray-900">
+                              {leaderUser.name ||
+                                leaderUser.email ||
+                                "Anonymous"}
+                              {leaderUser._id === user?._id && (
+                                <span className="ml-2 text-xs bg-[#fe0000] text-white px-2 py-1 rounded-full">
+                                  You
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">
+                            {leaderUser.referrals?.length || 0}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-[#fe0000]">
+                            ${(leaderUser.totalEarnings || 0).toFixed(2)}
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
             <div className="mt-4 text-center">
               <p className="text-sm text-gray-500">
-                Your current rank: <span className="font-medium text-gray-900">Not ranked yet</span>
+                Your current rank:{" "}
+                <span className="font-medium text-gray-900">
+                  {currentUserRank ? `#${currentUserRank}` : "Not ranked yet"}
+                </span>
               </p>
-              <p className="text-xs text-gray-400 mt-1">
-                Start referring friends to climb the leaderboard!
-              </p>
+              {!currentUserRank && (
+                <p className="text-xs text-gray-400 mt-1">
+                  Start referring friends to climb the leaderboard!
+                </p>
+              )}
             </div>
           </div>
         </div>
