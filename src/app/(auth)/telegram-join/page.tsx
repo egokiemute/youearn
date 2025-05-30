@@ -93,11 +93,12 @@ const JoinTelegram = () => {
       if (data.success) {
         setIsJoined(true);
         setSuccess("Great! Your Telegram join status has been updated.");
+        router.push("/profile");
       } else {
         setError(data.message || "Failed to update join status");
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
       setError("Something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
