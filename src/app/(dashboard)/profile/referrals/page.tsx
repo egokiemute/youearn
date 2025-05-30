@@ -121,7 +121,7 @@ const ReferralsPage = () => {
                   Your Referrals
                 </h1>
                 <p className="text-gray-600">
-                  {user?.telegramUsername} - Track all the people you've referred to Youearn
+                  {user?.telegramUsername} - Track all the people you&apos;ve referred to Youearn
                 </p>
               </div>
               <div className="text-right">

@@ -10,26 +10,16 @@ interface CustomError {
   name?: string;
 }
 
-    // If referrals is an array of IDs, we need to fetch the actual user data
-    interface ReferralUser {
-      _id: string;
-      name?: string;
-      email: string;
-      createdAt: Date;
-      totalEarnings?: number;
-    }
+// If referrals is an array of IDs, we need to fetch the actual user data
+interface ReferralUser {
+  _id: string;
+  name?: string;
+  email: string;
+  createdAt: Date;
+  totalEarnings?: number;
+}
 
-    interface PopulatedUser {
-      _id: string;
-      name: string;
-      email: string;
-      referrals: (ReferralUser | string)[];
-    }
-
-export async function GET(
-  request: Request,
-  { params }: { params: { userId: string } }
-) {
+export async function GET({ params }: { params: { userId: string } }) {
   try {
     await connectDB(); // Ensure database connection
 
@@ -47,9 +37,9 @@ export async function GET(
 
     // Find the user and populate their referrals
     const user = await UserModel.findById(userId).populate({
-      path: 'referrals',
-      select: 'name email createdAt totalEarnings', // Select only needed fields
-      options: { sort: { createdAt: -1 } } // Sort by newest first
+      path: "referrals",
+      select: "name email createdAt totalEarnings", // Select only needed fields
+      options: { sort: { createdAt: -1 } }, // Sort by newest first
     });
 
     if (!user) {
@@ -63,17 +53,19 @@ export async function GET(
     }
 
     let referralUsers: ReferralUser[] = [];
-    
+
     if (user.referrals && user.referrals.length > 0) {
       // Check if referrals are populated or just IDs
-      if (typeof user.referrals[0] === 'string') {
+      if (typeof user.referrals[0] === "string") {
         // If they're just IDs, fetch the actual user data
         const foundReferrals = await UserModel.find(
           { _id: { $in: user.referrals } },
-          'name email createdAt totalEarnings'
-        ).sort({ createdAt: -1 }).lean<ReferralUser[]>();
+          "name email createdAt totalEarnings"
+        )
+          .sort({ createdAt: -1 })
+          .lean<ReferralUser[]>();
 
-        referralUsers = foundReferrals.map(ref => ({
+        referralUsers = foundReferrals.map((ref) => ({
           _id: ref._id.toString(),
           name: ref.name,
           email: ref.email,
@@ -82,13 +74,16 @@ export async function GET(
         }));
       } else {
         // If already populated
-        referralUsers = (user.referrals as any[]).map(ref => ({
-          _id: ref._id?.toString?.() || ref._id,
-          name: ref.name || 'N/A',
-          email: ref.email || '',
-          createdAt: ref.createdAt || new Date(),
-          totalEarnings: ref.totalEarnings || 0,
-        }));
+        referralUsers = (user.referrals as unknown[]).map((ref) => {
+          const referral = ref as ReferralUser;
+          return {
+            _id: typeof referral._id === "object" && "toString" in referral._id ? (referral._id as any).toString() : referral._id,
+            name: referral.name || "N/A",
+            email: referral.email || "",
+            createdAt: referral.createdAt || new Date(),
+            totalEarnings: referral.totalEarnings || 0,
+          };
+        });
       }
     }
 
@@ -99,18 +94,17 @@ export async function GET(
         userEmail: user.email,
         // userName: user.name || "n/a",
         totalReferrals: referralUsers.length,
-        referrals: referralUsers.map(referral => ({
+        referrals: referralUsers.map((referral) => ({
           id: referral._id,
-          name: referral.name || 'N/A',
+          name: referral.name || "N/A",
           email: referral.email,
           joinedDate: referral.createdAt,
           totalEarnings: referral.totalEarnings || 0,
-        }))
-      }
+        })),
+      },
     };
 
     return NextResponse.json(response, { status: 200 });
-
   } catch (error: unknown) {
     // Type-safe error handling
     const processedError = error as CustomError;
