@@ -21,11 +21,11 @@ interface ReferralUser {
 
 export async function GET(request: NextRequest) {
   try {
-    await connectDB(); // Ensure database connection
+    await connectDB(); 
 
     // Extract userId from the URL pathname
     const pathname = request.nextUrl.pathname;
-    const userId = pathname.split('/')[3]; // /api/user/[userId]/referrals
+    const userId = pathname.split('/')[3];
 
     if (!userId) {
       return NextResponse.json(
@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
     const user = await UserModel.findById(userId).populate({
       path: "referrals",
       select: "name email createdAt totalEarnings", // Select only needed fields
-      options: { sort: { createdAt: -1 } }, // Sort by newest first
+      options: { sort: { createdAt: -1 } },
     });
 
     if (!user) {
