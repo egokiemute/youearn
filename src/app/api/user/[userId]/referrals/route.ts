@@ -1,7 +1,7 @@
 // /api/user/[userId]/referrals/route.js
 import { connectDB } from "@/config/connectDB";
 import UserModel from "@/models/User";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // Define a custom error interface
 interface CustomError {
@@ -19,12 +19,13 @@ interface ReferralUser {
   totalEarnings?: number;
 }
 
-export async function GET(
-  context: { params: { userId: string } }) {
+export async function GET(request: NextRequest) {
   try {
     await connectDB(); // Ensure database connection
 
-    const { userId } = context.params;
+    // Extract userId from the URL pathname
+    const pathname = request.nextUrl.pathname;
+    const userId = pathname.split('/')[3]; // /api/user/[userId]/referrals
 
     if (!userId) {
       return NextResponse.json(
@@ -93,7 +94,7 @@ export async function GET(
       data: {
         userId: user._id,
         userEmail: user.email,
-        // userName: user.name || "n/a",
+        userName: user.telegramUsername || "N/A",
         totalReferrals: referralUsers.length,
         referrals: referralUsers.map((referral) => ({
           id: referral._id,
