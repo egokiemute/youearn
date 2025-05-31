@@ -20,7 +20,7 @@ interface User {
   _id?: string;
   name?: string;
   email?: string;
-};
+}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface LeaderboardUser {
@@ -30,7 +30,7 @@ interface LeaderboardUser {
   referrals?: number[];
   totalEarnings?: number;
   referralCode?: string;
-};
+}
 
 const DashboardPage = () => {
   const { user } = useUser() as { user: User };
@@ -139,7 +139,8 @@ const DashboardPage = () => {
               Welcome to your Youearn Dashboard
             </h1>
             <p className="text-gray-600">
-              We are a reliable and collectively shared revenue advertising platform that pays you for every click.
+              We are a reliable and collectively shared revenue advertising
+              platform that pays you for every click.
             </p>
           </div>
 

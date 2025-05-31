@@ -3,18 +3,18 @@
 import { useUser } from "@/Provider/UserProvider";
 import React, { useState } from "react";
 
-// Handle form submission
-interface ApiResponse {
-  success: boolean;
-  message?: string;
-  data?: { bankDetails: BankDetails } | null;
-}
-
-// Handle form input changes
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface BankDetails {
   accountName: string;
   bankName: string;
   accountNumber: string;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface ApiResponse {
+  success: boolean;
+  message?: string;
+  data?: { bankDetails: BankDetails } | null;
 }
 
 interface HandleInputChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
@@ -85,7 +85,7 @@ const Details = () => {
 
       if (data.success) {
         setMessage("Bank details saved successfully!");
-        console.log(data)
+        console.log(data);
       } else {
         setMessage(
           data.message || "Failed to save bank details. Please try again."
@@ -99,7 +99,7 @@ const Details = () => {
     }
   };
 
-  console.log(bankDetails)
+  console.log(bankDetails);
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white">
