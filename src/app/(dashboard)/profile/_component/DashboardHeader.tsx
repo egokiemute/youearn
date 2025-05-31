@@ -7,7 +7,7 @@ import { CreditCard, Home, MenuIcon, User } from "lucide-react";
 import { Poppins } from "next/font/google";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { Children, useState } from "react";
+import React, { useState } from "react";
 
 const poppins = Poppins({
   subsets: ["latin"],
