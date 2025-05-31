@@ -19,7 +19,7 @@ interface User {
   _id?: string;
   name?: string;
   email?: string;
-}
+};
 
 interface LeaderboardUser {
   _id: string;
@@ -28,7 +28,7 @@ interface LeaderboardUser {
   referrals?: number[];
   totalEarnings?: number;
   referralCode?: string;
-}
+};
 
 const DashboardPage = () => {
   const { user } = useUser() as { user: User };

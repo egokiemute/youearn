@@ -67,9 +67,9 @@ const AllUsersByAdmin = () => {
           // console.log("=== DEBUG INFO ===");
           // console.log("Total users fetched:", nonAdminUsers.length);
           
-          const usersWithBankDetails = nonAdminUsers.filter((user: User) => 
-            user.bankDetails && (user.bankDetails.accountName || user.bankDetails.bankName || user.bankDetails.accountNumber)
-          );
+          // const usersWithBankDetails = nonAdminUsers.filter((user: User) => 
+          //   user.bankDetails && (user.bankDetails.accountName || user.bankDetails.bankName || user.bankDetails.accountNumber)
+          // );
           // console.log("Users with bank details:", usersWithBankDetails.length);
           
           // if (usersWithBankDetails.length > 0) {
