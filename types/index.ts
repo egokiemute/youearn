@@ -10,12 +10,23 @@ export interface LoginData {
   password: string;
 }
 
+export interface BankDetails {
+  accountName?: string;
+  bankName?: string;
+  accountNumber?: string;
+  updatedAt?: Date;
+}
+
 export interface UserData {
   id: string;
   email: string;
   telegramUsername: string;
+  profilePicture?: string;
   referralCode: string;
   telegramJoined: boolean;
+  accountName?: string;
+  bankName?: string;
+  accountNumber?: string;
   createdAt?: Date;
   wasReferred?: boolean; // Indicates if the user was referred by someone
   referredBy?: string | null; // The referral code of the user who referred this user
@@ -41,6 +52,7 @@ export interface AdminUserData {
   telegramUsername: string;
   referralCode: string;
   telegramJoined: boolean;
+  profilePicture?: string;
   createdAt: Date;
   referralCount: number;
   telegramJoinedReferrals: number;
@@ -57,13 +69,18 @@ export interface ApiResponse {
     telegramJoined?: boolean;
     username?: string;
     users?: AdminUserData[];
-     summary?: {
+    bankDetails?: {
+      accountNumber: string;
+      accountName: string;
+      bankName: string;
+    },
+    summary?: {
       totalUsers: number;
       totalReferrals: number;
       totalTelegramJoined: number;
       averageReferralsPerUser: number | string;
     };
-    nextStep?: 'telegram-join' | 'profile-complete';
+    nextStep?: "telegram-join" | "profile-complete";
   };
   error?: string;
 }

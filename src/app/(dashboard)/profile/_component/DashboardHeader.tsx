@@ -1,11 +1,13 @@
 "use client";
+import { NavbarSidebar } from "@/app/(home)/navbar-sidebar";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/Provider/UserProvider";
-import { CreditCard, Home, User } from "lucide-react";
+import { CreditCard, Home, MenuIcon, User } from "lucide-react";
 import { Poppins } from "next/font/google";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
+import React, { Children, useState } from "react";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -15,6 +17,7 @@ const poppins = Poppins({
 const DashboardHeader = () => {
   const { user } = useUser();
   const pathname = usePathname();
+  const [isSidebarOpen, setSidebarOpen] = useState(false); // State to manage sidebar open/close
 
   const userNavItems = [
     {
@@ -46,8 +49,15 @@ const DashboardHeader = () => {
     // },
   ];
 
+const NavbarItems = [
+  { children: "Dashboard", href: "/profile" },
+  { children: "Referrals", href: "/profile/referrals" },
+  { children: "Profile", href: "/profile/details" },
+  { children: "T&Cs", href: "/terms" },
+];
+
   return (
-    <nav className="bg-[#09005b3d] shadow-md">
+    <nav className="bg-[#09005b] shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo - visible on mobile */}
@@ -55,15 +65,21 @@ const DashboardHeader = () => {
             <Link
               href="/"
               className={cn(
-                "flex items-center text-2xl font-semibold text-[#09005b]",
+                "flex items-center text-2xl font-semibold",
                 poppins.className
               )}
             >
-              <span>You</span>
+              <span className="text-[#fff]">You</span>
               <span className="text-[#fe0000]">earn</span>
               {/* <span className="text-[#fff] ml-1">Referral</span> */}
             </Link>
           </div>
+
+          <NavbarSidebar
+            items={NavbarItems}
+            open={isSidebarOpen}
+            onOpenChange={setSidebarOpen}
+          />
 
           {/* Navigation Items */}
           <div className="hidden md:flex items-center space-x-1">
@@ -89,14 +105,16 @@ const DashboardHeader = () => {
                 </span>
               </div>
             )}
-            
+
             {/* Mobile menu button - you can add mobile menu functionality here */}
-            <div className="md:hidden">
-              <button className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100">
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
+            <div className="flex items-center justify-center lg:hidden">
+              <Button
+                variant="ghost"
+                className="border-transparent size-12 bg-white"
+                onClick={() => setSidebarOpen(!isSidebarOpen)}
+              >
+                <MenuIcon className="h-12 w-12" />
+              </Button>
             </div>
           </div>
         </div>

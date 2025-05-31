@@ -114,7 +114,7 @@ const DashboardPage = () => {
       try {
         await navigator.share({
           title: "Join Youearn - Crypto Advert Earning Platform",
-          text: "Start earning crypto by viewing ads! Use my referral link to get started.",
+          text: "Earn rewards when you referral someone! Use my referral link to get started.",
           url: referralLink,
         });
       } catch (err) {
@@ -134,11 +134,10 @@ const DashboardPage = () => {
           {/* Welcome Header */}
           <div className="bg-white shadow rounded-lg p-6">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Welcome to Your Youearn Dashboard
+              Welcome to your Youearn Dashboard
             </h1>
             <p className="text-gray-600">
-              Youearn is a crypto advert earning platform. Share your referral
-              link and earn rewards!
+              We are a reliable and collectively shared revenue advertising platform that pays you for every click.
             </p>
           </div>
 
@@ -200,8 +199,7 @@ const DashboardPage = () => {
               Your Referral Link
             </h2>
             <p className="text-gray-600 mb-4">
-              Share this link with friends and earn crypto when they join and
-              start earning!
+              Earn rewards when you share this link with friends, start earning!
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3">

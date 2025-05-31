@@ -11,6 +11,11 @@ export interface IUser {
   referrals: mongoose.Types.ObjectId[];
   telegramJoined: boolean;
   role: string;
+  bankDetails?: {
+    accountName: string;
+    bankName: string;
+    accountNumber: string;
+  };
   refreshToken: string;
   isVerified?: boolean;
   wasReferred?: boolean;
@@ -18,7 +23,7 @@ export interface IUser {
   updatedAt: Date;
 }
 
-export interface IUserWithReferrals extends Omit<IUser, 'referrals'> {
+export interface IUserWithReferrals extends Omit<IUser, "referrals"> {
   referrals: IUser[];
 }
 
@@ -46,7 +51,7 @@ interface IUserStatics extends Model<IUser> {
       referralCode: string;
       telegramJoined: boolean;
     }>;
-    referralLink: string; 
+    referralLink: string;
   }>;
   createWithReferral(userData: {
     email: string;
@@ -83,15 +88,20 @@ const userSchema = new mongoose.Schema<IUser, IUserStatics>(
     },
     referredBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       default: null,
     },
     referrals: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: "User",
       },
     ],
+    bankDetails: {
+      accountName: { type: String },
+      accountNumber: { type: String },
+      bankName: { type: String },
+    },
     telegramJoined: { type: Boolean, default: false },
     wasReferred: { type: Boolean, default: false },
     role: { type: String, default: "user", enum: ["admin", "user"] },
@@ -118,12 +128,12 @@ userSchema.pre("save", async function (next) {
 
 // Static methods
 userSchema.statics.generateReferralCode = async function (): Promise<string> {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let code = '';
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let code = "";
   let isUnique = false;
 
   while (!isUnique) {
-    code = '';
+    code = "";
     for (let i = 0; i < 5; i++) {
       code += chars.charAt(Math.floor(Math.random() * chars.length));
     }
@@ -170,7 +180,7 @@ userSchema.statics.createWithReferral = async function (
   // Update the referrer's referrals array
   if (referrer) {
     await this.findByIdAndUpdate(
-      referrer._id, 
+      referrer._id,
       { $push: { referrals: newUser._id } },
       { new: true }
     );
@@ -187,20 +197,20 @@ userSchema.statics.getAllUsersWithStats = async function () {
   return await this.aggregate([
     {
       $lookup: {
-        from: 'users',
-        localField: '_id',
-        foreignField: 'referredBy',
-        as: 'referredUsers',
+        from: "users",
+        localField: "_id",
+        foreignField: "referredBy",
+        as: "referredUsers",
       },
     },
     {
       $addFields: {
-        referralCount: { $size: '$referredUsers' },
+        referralCount: { $size: "$referredUsers" },
         telegramJoinedReferrals: {
           $size: {
             $filter: {
-              input: '$referredUsers',
-              cond: { $eq: ['$$this.telegramJoined', true] },
+              input: "$referredUsers",
+              cond: { $eq: ["$$this.telegramJoined", true] },
             },
           },
         },
@@ -231,29 +241,30 @@ userSchema.statics.isValidReferralCode = function (code: string): boolean {
 };
 
 // Instance methods
-userSchema.methods.getWithReferrals = async function (): Promise<IUserWithReferrals> {
-  await this.populate({
-    path: 'referrals',
-    select: 'email telegramUsername createdAt referralCode',
-  });
-  
-  return {
-    _id: this._id,
-    email: this.email,
-    password: this.password,
-    telegramUsername: this.telegramUsername,
-    referralCode: this.referralCode,
-    referredBy: this.referredBy,
-    referrals: this.referrals as IUser[],
-    telegramJoined: this.telegramJoined,
-    role: this.role,
-    refreshToken: this.refreshToken,
-    isVerified: this.isVerified,
-    wasReferred: this.wasReferred,
-    createdAt: this.createdAt,
-    updatedAt: this.updatedAt,
+userSchema.methods.getWithReferrals =
+  async function (): Promise<IUserWithReferrals> {
+    await this.populate({
+      path: "referrals",
+      select: "email telegramUsername createdAt referralCode",
+    });
+
+    return {
+      _id: this._id,
+      email: this.email,
+      password: this.password,
+      telegramUsername: this.telegramUsername,
+      referralCode: this.referralCode,
+      referredBy: this.referredBy,
+      referrals: this.referrals as IUser[],
+      telegramJoined: this.telegramJoined,
+      role: this.role,
+      refreshToken: this.refreshToken,
+      isVerified: this.isVerified,
+      wasReferred: this.wasReferred,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    };
   };
-};
 
 userSchema.methods.getReferralStats = async function () {
   const totalReferrals = this.referrals.length;
@@ -261,10 +272,12 @@ userSchema.methods.getReferralStats = async function () {
 
   const referralDetails = await User.find(
     { _id: { $in: this.referrals } },
-    'email telegramUsername createdAt referralCode telegramJoined'
+    "email telegramUsername createdAt referralCode telegramJoined"
   ).sort({ createdAt: -1 });
 
-  const telegramJoinedCount = referralDetails.filter(r => r.telegramJoined).length;
+  const telegramJoinedCount = referralDetails.filter(
+    (r) => r.telegramJoined
+  ).length;
 
   return {
     totalReferrals,
@@ -280,6 +293,8 @@ userSchema.methods.updateTelegramJoined = async function () {
 };
 
 // Final model
-const UserModel = (mongoose.models.User as IUserStatics) || mongoose.model<IUser, IUserStatics>("User", userSchema);
+const UserModel =
+  (mongoose.models.User as IUserStatics) ||
+  mongoose.model<IUser, IUserStatics>("User", userSchema);
 
 export default UserModel;

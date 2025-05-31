@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-// import connectDB from '@/lib/db';
-// import UserModel from '@/models/UserModel';
 import { getUserFromRequest } from '@/lib/auth';
 import { ApiResponse } from '../../../../../types';
 import UserModel from '@/models/User';
 import { connectDB } from '@/config/connectDB';
-// import { ApiResponse } from '@/types';
 
 export async function GET(request: NextRequest) {
   try {
@@ -47,19 +44,24 @@ export async function GET(request: NextRequest) {
     };
 
     return NextResponse.json<ApiResponse>({
-        message: 'User profile fetched successfully',
+      message: 'User profile fetched successfully',
       success: true,
       data: {
-        user: {
-          id: userDoc._id.toString(),
-          email: userDoc.email,
-          telegramUsername: userDoc.telegramUsername,
-          referralCode: userDoc.referralCode,
-          telegramJoined: userDoc.telegramJoined,
-          createdAt: userDoc.createdAt,
-          role: userDoc.role
-        },
-        referralStats
+      user: {
+        id: userDoc._id.toString(),
+        email: userDoc.email,
+        telegramUsername: userDoc.telegramUsername,
+        referralCode: userDoc.referralCode,
+        telegramJoined: userDoc.telegramJoined,
+        createdAt: userDoc.createdAt,
+        role: userDoc.role,
+        accountName: userDoc.bankDetails?.accountName,
+        accountNumber: userDoc.bankDetails?.accountNumber,
+        bankName: userDoc.bankDetails?.bankName,
+        wasReferred: !!userDoc.referredBy,
+        referredBy: userDoc.referredBy ? userDoc.referredBy.toString() : null
+      },
+      referralStats
       }
     });
 
