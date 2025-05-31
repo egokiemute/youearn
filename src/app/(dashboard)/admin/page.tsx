@@ -2,6 +2,7 @@
 import AllUsersByAdmin from "@/components/templates/AllUsersByAdmin";
 import { useAuth } from "@/hooks/useAuth";
 import React from "react";
+import LeaderBoard from "./_component/Leaderboard";
 
 const AdminDashboardPage = () => {
   const { logout, isLoggingOut } = useAuth();
@@ -64,6 +65,9 @@ const AdminDashboardPage = () => {
           </div>
           <div className="px-2">
             <AllUsersByAdmin />
+          </div>
+          <div className="px-2">
+            <LeaderBoard />
           </div>
         </div>
       </div>

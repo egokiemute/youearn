@@ -168,9 +168,9 @@ const LoginPage = () => {
           )}
         </div>
 
-        <div className="w-fit ml-auto text-sm cursor-pointer hover:text-green-800 -mt-2">
+        {/* <div className="w-fit ml-auto text-sm cursor-pointer hover:text-green-800 -mt-2">
           <Link href={"/forgot-password"}>Forgot password?</Link>
-        </div>
+        </div> */}
 
         <Button
           disabled={isLoading}

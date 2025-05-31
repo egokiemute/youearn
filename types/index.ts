@@ -78,6 +78,7 @@ export interface ApiResponse {
       totalUsers: number;
       totalReferrals: number;
       totalTelegramJoined: number;
+      usersWithReferralCodes: number;
       averageReferralsPerUser: number | string;
     };
     nextStep?: "telegram-join" | "profile-complete";
