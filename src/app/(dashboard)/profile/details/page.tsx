@@ -17,8 +17,10 @@ interface ApiResponse {
   data?: { bankDetails: BankDetails } | null;
 }
 
-interface HandleInputChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
-
+// interface HandleInputChangeEvent extends React.ChangeEvent<HTMLInputElement> {}
+/* This interface is not strictly necessary since it's just an alias for React.ChangeEvent<HTMLInputElement>,
+  but it can help with readability and explicit typing. You can safely remove it and use
+  React.ChangeEvent<HTMLInputElement> directly in your code if you prefer. */
 const Details = () => {
   const { user } = useUser();
 
@@ -32,7 +34,7 @@ const Details = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleInputChange = (e: HandleInputChangeEvent) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setBankDetails((prev: BankDetails) => ({
       ...prev,
