@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import React, { useState, useEffect } from "react";
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface User {
   referrals?: number[];
   totalEarnings?: number;
@@ -21,6 +22,7 @@ interface User {
   email?: string;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface LeaderboardUser {
   _id: string;
   name?: string;
