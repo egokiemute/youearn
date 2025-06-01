@@ -191,6 +191,7 @@ function SignupForm() {
             onChange={handleChange}
             className={errors.telegramUsername ? "border-red-500" : ""}
           />
+          <span className="mt-1 text-xs text-[#09005b]">Just 'youearn' not '@youearn'.</span>
           {errors.telegramUsername && (
             <p className="text-red-500 text-sm mt-1">
               {errors.telegramUsername}
