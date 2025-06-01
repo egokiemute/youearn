@@ -160,10 +160,10 @@ const DashboardPage = () => {
                     Join our telegram channel
                   </p>
                   <p className="text-2xl font-semibold text-gray-900">
-                    Youearn Telegram Community
+                    Youearn Community
                   </p>
                 </div>
-                <div className="bg-[#fe0000dd] text-[#fff] flex gap-1 items-center font-sans font-medium rounded-2xl px-4 py-2 flex-shrink-0">
+                <div className="bg-[#fe0000dd] text-[#fff] mt-auto flex gap-1 items-center font-sans font-medium rounded-2xl px-4 py-2 flex-shrink-0">
                   <EarthIcon className="h-4 w-4 text-[#fff]" />
                   Join now
                 </div>

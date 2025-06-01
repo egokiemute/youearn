@@ -1,6 +1,7 @@
 "use client";
 import { NavbarSidebar } from "@/app/(home)/navbar-sidebar";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/Provider/UserProvider";
 import { CreditCard, Home, MenuIcon, User } from "lucide-react";
