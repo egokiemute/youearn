@@ -100,7 +100,7 @@ const DashboardPage = () => {
     return userIndex >= 0 ? userIndex + 1 : null;
   };
 
-  const referralLink = `https://youearn.com/${user?.referralCode}`;
+  const referralLink = `https://youearn.vercel.app/${user?.referralCode}`;
 
   const copyToClipboard = async () => {
     try {
