@@ -26,7 +26,7 @@ const DashboardHeader = () => {
       label: "Dashboard",
       activeClass:
         pathname === "/profile"
-          ? "bg-[#09005b] text-[#fff]"
+          ? "bg-[#fff] text-[#09005baa]"
           : "hover:bg-gray-50",
     },
     {
@@ -35,7 +35,7 @@ const DashboardHeader = () => {
       label: "Referrals",
       activeClass:
         pathname === "/profile/referrals"
-          ? "bg-[#09005b] text-[#fff]"
+          ? "bg-[#fff] text-[#09005baa]"
           : "hover:bg-gray-50",
     },
     // {
@@ -96,12 +96,12 @@ const NavbarItems = [
           </div>
 
           {/* User info or mobile menu button */}
-          <div className="flex items-center">
+          <div className="flex items-center cursor-pointer">
             {user && (
-              <div className="hidden md:flex items-center space-x-3">
-                <User className="h-6 w-6 text-gray-600" />
-                <span className="text-sm text-gray-700">
-                  Welcome, {user.telegramUsername || user.email}
+              <div className="hidden md:flex items-center space-x-3 text-white">
+                <User className="h-6 w-6 text-white" />
+                <span className="text-sm text-white">
+                  {user.telegramUsername || user.email}
                 </span>
               </div>
             )}

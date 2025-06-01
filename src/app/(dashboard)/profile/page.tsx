@@ -8,6 +8,7 @@ import {
   ExternalLink,
   CheckCircle,
   Loader2,
+  EarthIcon,
 } from "lucide-react";
 import React, { useState, useEffect } from "react";
 
@@ -129,19 +130,45 @@ const DashboardPage = () => {
 
   const currentUserRank = getCurrentUserRank();
 
+  // Join telegram
+  const handleJoinTelegram = () => {
+    // Open Telegram channel in new tab
+    window.open("https://t.me/youearn_offers", "_blank");
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 py-8">
         <div className="flex flex-col gap-8">
-          {/* Welcome Header */}
-          <div className="bg-white shadow rounded-lg p-6">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Welcome to your Youearn Dashboard
-            </h1>
-            <p className="text-gray-600">
-              We are a reliable and collectively shared revenue advertising
-              platform that pays you for every click.
-            </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Welcome Header */}
+            <div className="bg-white shadow rounded-lg p-6">
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                Welcome to your Youearn Dashboard
+              </h1>
+              <p className="text-gray-600">
+                We are a reliable and collectively shared revenue advertising
+                platform that pays you for every click.
+              </p>
+            </div>
+            {/* Join Telegram */}
+            <button onClick={handleJoinTelegram} className="bg-white shadow rounded-lg p-6 cursor-pointer">
+              <div className="flex justify-between items-start">
+                
+                <div className="text-start ml-4">
+                  <p className="text-sm font-medium text-gray-500">
+                    Join our telegram channel
+                  </p>
+                  <p className="text-2xl font-semibold text-gray-900">
+                    Youearn Telegram Community
+                  </p>
+                </div>
+                <div className="bg-[#fe0000dd] text-[#fff] flex gap-1 items-center font-sans font-medium rounded-2xl px-4 py-2 flex-shrink-0">
+                  <EarthIcon className="h-4 w-4 text-[#fff]" />
+                  Join now
+                </div>
+              </div>
+            </button>
           </div>
 
           {/* Stats Overview */}
