@@ -104,7 +104,7 @@ const userSchema = new mongoose.Schema<IUser, IUserStatics>(
     },
     telegramJoined: { type: Boolean, default: false },
     wasReferred: { type: Boolean, default: false },
-    role: { type: String, default: "admin", enum: ["admin", "user"] },
+    role: { type: String, default: "user", enum: ["admin", "user"] },
     refreshToken: { type: String, default: "" },
     isVerified: { type: Boolean, default: false },
   },
