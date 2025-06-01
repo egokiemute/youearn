@@ -1,5 +1,6 @@
 import React from "react";
 import { Facebook, Twitter, Instagram } from "lucide-react";
+import Link from "next/link";
 
 export const Footer = () => {
   return (
@@ -19,8 +20,8 @@ export const Footer = () => {
         <div>
           <h3 className="text-md font-semibold mb-3">Quick Links</h3>
           <ul className="space-y-2 text-sm">
-            <li><a href="/" className="hover:underline">Home</a></li>
-            <li><a href="/terms" className="hover:underline">Terms & Condition</a></li>
+            <li><Link href="/" className="hover:underline cursor-pointer">Home</Link></li>
+            <li><Link href="/terms" className="hover:underline cursor-pointer">Terms & Condition</Link></li>
           </ul>
         </div>
 
@@ -43,15 +44,15 @@ export const Footer = () => {
         <div>
           <h3 className="text-md font-semibold mb-3">Follow Us</h3>
           <div className="flex gap-4 text-white">
-            <a href="https://www.facebook.com/share/19Fiuc84rB/" target="_blank" aria-label="Facebook">
+            <Link className="cursor-pointer" href="https://www.facebook.com/share/19Fiuc84rB/" target="_blank" aria-label="Facebook">
               <Facebook className="w-5 h-5 text-white" />
-            </a>
-            <a href="https://x.com/Youearn_offers" target="_blank" aria-label="Twitter">
+            </Link>
+            <Link className="cursor-pointer" href="https://x.com/Youearn_offers" target="_blank" aria-label="Twitter">
               <Twitter className="w-5 h-5 text-white" />
-            </a>
-            <a href="https://www.instagram.com/youearn_offers/" target="_blank" aria-label="Instagram">
+            </Link>
+            <Link className="cursor-pointer" href="https://www.instagram.com/youearn_offers/" target="_blank" aria-label="Instagram">
               <Instagram className="w-5 h-5 text-white" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>
