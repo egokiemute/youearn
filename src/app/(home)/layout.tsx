@@ -1,4 +1,4 @@
-// import { Footer } from "./footer";
+import { Footer } from "./footer";
 import { Navbar } from "./navbar";
 
 interface LayoutProps {
@@ -10,7 +10,7 @@ const layout = ({ children }: LayoutProps) => {
     <div className="flex flex-col min-h-screen w-full">
       <Navbar />
       <div className="flex-1 bg-[#F4F4F0]">{children}</div>
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 };

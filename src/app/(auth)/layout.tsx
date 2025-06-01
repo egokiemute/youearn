@@ -1,3 +1,4 @@
+import { Footer } from "../(home)/footer";
 import { Navbar } from "../(home)/navbar";
 
 export default function AuthLayout({
@@ -18,6 +19,7 @@ export default function AuthLayout({
           {children}
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

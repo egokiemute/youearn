@@ -1,5 +1,6 @@
 import React from "react";
 import DashboardHeader from "./_component/DashboardHeader";
+import { Footer } from "@/app/(home)/footer";
 
 export default function DashboardLayout({
   children,
@@ -12,6 +13,7 @@ export default function DashboardLayout({
         <DashboardHeader />
         {/* Children */}
         {children}
+        <Footer />
       </main>
     </>
   );

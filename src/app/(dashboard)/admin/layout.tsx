@@ -1,3 +1,4 @@
+// import { Footer } from "@/app/(home)/footer";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import React from "react";
 
@@ -17,6 +18,7 @@ export default function AdminDashboardLayout({
 
         {/* Children */}
         {children}
+        {/* <Footer /> */}
       </main>
     </SidebarProvider>
   );
