@@ -244,7 +244,7 @@ const AllUsersByAdmin = () => {
           </div>
 
           {/* Debug Information Panel */}
-          {showDebugInfo && (
+          {/* {showDebugInfo && (
             <div className="mb-6 bg-gray-50 border border-gray-200 rounded-lg p-4">
               <h3 className="text-lg font-medium text-gray-900 mb-3">Debug Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
@@ -271,7 +271,7 @@ const AllUsersByAdmin = () => {
                 </div>
               )}
             </div>
-          )}
+          )} */}
 
           {users.length === 0 ? (
             <div className="text-center py-12">

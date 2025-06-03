@@ -103,21 +103,10 @@ const LoginPage = () => {
       const redirectPath = urlParams.get("redirect");
       console.log(redirectPath);
 
-      if (result.data.user.role === "admin") {
-        router.push("/admin");
-      } else {
-        router.push("/profile");
-      }
-
+      // Handle redirect logic - only one router.push call
       if (redirectPath) {
-        // Redirect to the original intended path
+        // If there's a redirect path, use it
         router.push(redirectPath);
-
-        if (result.data.user.role === "admin") {
-          router.push("/admin");
-        } else {
-          router.push("/profile");
-        }
       } else {
         // Default redirect based on user role
         if (result.data.user.role === "admin") {
